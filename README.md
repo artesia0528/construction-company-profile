@@ -1,58 +1,152 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Nusantara Build Construction - Company Profile Template
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Reusable Laravel + Filament starter template for construction company profile websites. It includes a public-facing marketing site, a Filament admin panel for content management, PostgreSQL-ready configuration, demo seed data, and reusable Blade components.
 
-## About Laravel
+## Tech Stack
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- **Backend:** Laravel 13 / PHP 8.3+ (project currently runs on PHP 8.5)
+- **Admin/CMS:** Filament 5
+- **Frontend:** Blade + Tailwind CSS v4
+- **Interactivity:** Vanilla JS (mobile nav toggle)
+- **Database:** PostgreSQL (recommended for app), SQLite for tests
+- **Testing:** Pest 5
+- **Assets:** Vite 8
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Features
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- Public pages: Home, About, Services, Service Detail, Projects, Project Detail, Contact
+- Dynamic content from database: services, projects, project gallery, testimonials, team, statistics, company settings, contact messages
+- Filament admin resources for Services, Projects, Testimonials, Teams, Statistics, Contact Messages
+- Singleton Company Settings page in Filament
+- Dashboard stats + recent contact messages widget
+- Contact form validation and database storage
+- Reusable Blade components for layout, UI, cards, and sections
+- SEO-friendly slugs and dynamic page titles/meta descriptions
 
-## Learning Laravel
+## Project Structure
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+```text
+app/
+├── Filament/
+│   ├── Pages/ManageCompanySetting.php
+│   ├── Resources/                  # Filament CRUD resources
+│   └── Widgets/                    # Dashboard widgets
+├── Http/
+│   ├── Controllers/                # Thin public controllers
+│   └── Requests/ContactMessageRequest.php
+├── Models/                         # Eloquent models + scopes/relations
+└── Providers/
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
-
-## Agentic Development
-
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
-
-```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+resources/views/
+├── components/
+│   ├── layouts/app.blade.php
+│   ├── layout/{navbar,footer}.blade.php
+│   ├── ui/{button,section-heading,breadcrumb}.blade.php
+│   ├── ui/form/{input,textarea}.blade.php
+│   ├── cards/{project,service,testimonial,team,statistic,feature}-card.blade.php
+│   └── sections/{hero,company-intro,stats,services,featured-projects,why-choose-us,testimonials,cta,page-banner}.blade.php
+└── pages/                          # Public page compositions
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+## Installation
 
-## Contributing
+1. Install PHP dependencies:
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```bash
+composer install
+```
 
-## Code of Conduct
+2. Install JS dependencies:
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```bash
+npm install
+```
 
-## Security Vulnerabilities
+3. Create environment file and app key:
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```bash
+cp .env.example .env
+php artisan key:generate
+```
 
-## License
+4. Configure PostgreSQL in `.env` (defaults in `.env.example`):
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+```env
+DB_CONNECTION=pgsql
+DB_HOST=127.0.0.1
+DB_PORT=5432
+DB_DATABASE=construction_company_profile
+DB_USERNAME=postgres
+DB_PASSWORD=your_password
+FILESYSTEM_DISK=public
+```
+
+5. Run migrations and seed demo data:
+
+```bash
+php artisan migrate --seed
+```
+
+6. Create storage symlink:
+
+```bash
+php artisan storage:link
+```
+
+7. Build assets (or run dev server):
+
+```bash
+npm run build
+# or
+npm run dev
+```
+
+8. Start Laravel:
+
+```bash
+php artisan serve
+```
+
+## Admin Panel
+
+- URL: `/admin`
+- Seeded local admin user:
+  - Email: `admin@nusantarabuild.co.id`
+  - Password: `password`
+
+Change seeded credentials before using in any real environment.
+
+## Development Commands
+
+```bash
+php artisan test --compact      # Run tests
+vendor/bin/pint --dirty --format agent  # Format changed PHP files
+npm run build                   # Build frontend assets
+php artisan migrate:fresh --seed # Reset DB with demo data
+```
+
+## Adding Content
+
+- **Company profile/social/hero/about:** Filament > Company Settings
+- **Stats:** Filament > Statistics
+- **Services/Projects/Testimonials/Team:** respective Filament resources
+- **Contact messages:** submitted from public contact form, managed in Filament
+
+## Adding a New Public Page
+
+1. Create controller in `app/Http/Controllers`.
+2. Add route in `routes/web.php`.
+3. Create Blade page in `resources/views/pages/...` using `<x-layouts.app>`.
+4. Reuse existing components from `resources/views/components`.
+
+## Adding a New Blade Component
+
+1. Create component in appropriate folder (`ui`, `cards`, `sections`, `layout`).
+2. Keep it reusable with props/slots; avoid business logic.
+3. Use it in pages/sections instead of duplicating markup.
+
+## Notes
+
+- Tests use SQLite in-memory (`phpunit.xml`), so app DB can remain PostgreSQL.
+- Uploaded images use the `public` disk; run `php artisan storage:link`.
+- Demo content uses “Nusantara Build Construction” placeholder company data.
