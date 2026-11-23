@@ -66,6 +66,24 @@ class ServiceForm
                             ->default(true)
                             ->required(),
                     ]),
+                Section::make('SEO')
+                    ->columns(2)
+                    ->collapsed()
+                    ->schema([
+                        TextInput::make('seo_title')->maxLength(255),
+                        TextInput::make('canonical_url')->maxLength(2048)->url(),
+                        Textarea::make('seo_description')->rows(3)->columnSpanFull(),
+                        FileUpload::make('seo_image')
+                            ->image()
+                            ->disk(config('filesystems.media_disk', 'public'))
+                            ->visibility('public')
+                            ->directory('services/seo')
+                            ->maxSize(2048)
+                            ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
+                            ->saveUploadedFileUsing(fn ($file): string => ImageProcessor::process($file, 'services/seo'))
+                            ->deleteUploadedFileUsing(fn (?string $file): ?bool => $file ? (ImageProcessor::delete($file) ?? true) : null),
+                        Toggle::make('noindex')->label('Noindex this service'),
+                    ]),
             ]);
     }
 }

@@ -19,6 +19,11 @@ class CompanySetting extends Model
         'company_name',
         'company_logo',
         'company_description',
+        'seo_title',
+        'seo_description',
+        'seo_image',
+        'canonical_url',
+        'noindex',
         'company_address',
         'phone_number',
         'email_address',
@@ -47,6 +52,7 @@ class CompanySetting extends Model
     {
         return [
             'company_values' => 'array',
+            'noindex' => 'boolean',
         ];
     }
 
@@ -85,7 +91,7 @@ class CompanySetting extends Model
 
     public static function imageMediaFields(): array
     {
-        return ['company_logo', 'hero_image'];
+        return ['company_logo', 'hero_image', 'seo_image'];
     }
 
     public function logoUrl(): ?string
@@ -101,6 +107,11 @@ class CompanySetting extends Model
     public function heroImageThumbUrl(): ?string
     {
         return $this->imageThumbUrl($this->hero_image);
+    }
+
+    public function seoImageUrl(): ?string
+    {
+        return $this->imageUrl($this->seo_image);
     }
 
     protected static function booted(): void

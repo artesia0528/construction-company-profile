@@ -1,4 +1,4 @@
-<x-layouts.app :title="$service->name" :description="$service->short_description">
+<x-layouts.app :title="$service->name" :description="$service->short_description" :seo="$seo">
     <x-sections.page-banner eyebrow="Service Detail" :title="$service->name" :description="$service->short_description" :breadcrumbs="[['url' => route('home'), 'label' => 'Home'], ['url' => route('services.index'), 'label' => 'Services'], ['label' => $service->name]]" />
 
     <section class="section-pad">

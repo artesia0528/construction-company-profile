@@ -5,16 +5,27 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ContactMessageRequest;
 use App\Models\CompanySetting;
 use App\Models\ContactMessage;
+use App\Support\Seo\SchemaBuilder;
+use App\Support\Seo\SeoResolver;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class ContactController extends Controller
 {
-    public function show(): View
+    public function show(Request $request, SeoResolver $seoResolver): View
     {
+        $companySetting = CompanySetting::current();
+
         return view('pages.contact', [
-            'companySetting' => CompanySetting::current(),
+            'companySetting' => $companySetting,
+            'seo' => $seoResolver->resolve($request, $companySetting, [
+                'title' => 'Contact',
+                'description' => 'Contact '.$companySetting->company_name.' for consultation, quotations, and project inquiries.',
+                'breadcrumbs' => [['label' => 'Home', 'url' => route('home')], ['label' => 'Contact', 'url' => route('contact')]],
+                'schema' => [app(SchemaBuilder::class)->webPage('ContactPage', 'Contact', route('contact'), 'Contact '.$companySetting->company_name.' for consultation, quotations, and project inquiries.')],
+            ]),
         ]);
     }
 

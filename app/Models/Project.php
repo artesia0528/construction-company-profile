@@ -22,6 +22,11 @@ class Project extends Model
         'title',
         'slug',
         'short_description',
+        'seo_title',
+        'seo_description',
+        'seo_image',
+        'canonical_url',
+        'noindex',
         'full_description',
         'category',
         'location',
@@ -40,6 +45,7 @@ class Project extends Model
             'completion_year' => 'integer',
             'is_featured' => 'boolean',
             'is_published' => 'boolean',
+            'noindex' => 'boolean',
         ];
     }
 
@@ -73,7 +79,7 @@ class Project extends Model
 
     public static function imageMediaFields(): array
     {
-        return ['cover_image'];
+        return ['cover_image', 'seo_image'];
     }
 
     public function coverImageUrl(): ?string
@@ -84,6 +90,11 @@ class Project extends Model
     public function coverImageThumbUrl(): ?string
     {
         return $this->imageThumbUrl($this->cover_image);
+    }
+
+    public function seoImageUrl(): ?string
+    {
+        return $this->imageUrl($this->seo_image);
     }
 
     protected static function booted(): void

@@ -1,4 +1,4 @@
-<x-layouts.app title="About Us" description="Learn about Nusantara Build Construction, our history, vision, mission, and team.">
+<x-layouts.app title="About Us" description="Learn about Nusantara Build Construction, our history, vision, mission, and team." :seo="$seo">
     <x-sections.page-banner eyebrow="About Us" title="Building With Integrity and Precision" description="We are a professional construction company focused on quality delivery, safety, and long-term client partnerships." :breadcrumbs="[['url' => route('home'), 'label' => 'Home'], ['label' => 'About Us']]" />
 
     <section class="section-pad">

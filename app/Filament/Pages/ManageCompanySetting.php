@@ -8,6 +8,7 @@ use BackedEnum;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
 use Filament\Schemas\Components\Section;
@@ -102,6 +103,23 @@ class ManageCompanySetting extends Page
                         TextInput::make('linkedin_url')->maxLength(255),
                         TextInput::make('copyright_text')->maxLength(255),
                         Textarea::make('google_maps_embed_url')->rows(3)->columnSpanFull(),
+                    ]),
+                Section::make('SEO')
+                    ->columns(2)
+                    ->schema([
+                        TextInput::make('seo_title')->maxLength(255),
+                        TextInput::make('canonical_url')->maxLength(2048)->url(),
+                        Textarea::make('seo_description')->rows(3)->columnSpanFull(),
+                        FileUpload::make('seo_image')
+                            ->image()
+                            ->disk(config('filesystems.media_disk', 'public'))
+                            ->visibility('public')
+                            ->directory('settings')
+                            ->maxSize(2048)
+                            ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
+                            ->saveUploadedFileUsing(fn ($file): string => ImageProcessor::process($file, 'settings'))
+                            ->deleteUploadedFileUsing(fn (?string $file): ?bool => $file ? (ImageProcessor::delete($file) ?? true) : null),
+                        Toggle::make('noindex')->label('Noindex this site page context')->helperText('Sets meta robots to noindex,follow when used.'),
                     ]),
             ]);
     }

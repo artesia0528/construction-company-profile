@@ -1,4 +1,4 @@
-<x-layouts.app title="Home" :description="$companySetting->company_description">
+<x-layouts.app title="Home" :description="$companySetting->company_description" :seo="$seo">
     <x-sections.hero :settings="$companySetting" />
     <x-sections.company-intro :settings="$companySetting" />
     <x-sections.stats :statistics="$statistics" />

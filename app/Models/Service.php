@@ -21,6 +21,11 @@ class Service extends Model
         'name',
         'slug',
         'short_description',
+        'seo_title',
+        'seo_description',
+        'seo_image',
+        'canonical_url',
+        'noindex',
         'full_description',
         'icon',
         'thumbnail_image',
@@ -34,6 +39,7 @@ class Service extends Model
         return [
             'is_active' => 'boolean',
             'display_order' => 'integer',
+            'noindex' => 'boolean',
         ];
     }
 
@@ -56,7 +62,7 @@ class Service extends Model
 
     public static function imageMediaFields(): array
     {
-        return ['thumbnail_image'];
+        return ['thumbnail_image', 'seo_image'];
     }
 
     public function thumbnailUrl(): ?string
@@ -67,6 +73,11 @@ class Service extends Model
     public function thumbnailThumbUrl(): ?string
     {
         return $this->imageThumbUrl($this->thumbnail_image);
+    }
+
+    public function seoImageUrl(): ?string
+    {
+        return $this->imageUrl($this->seo_image);
     }
 
     protected static function booted(): void
