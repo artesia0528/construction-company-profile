@@ -16,9 +16,19 @@
                 @if ($project->images->isNotEmpty())
                     <div class="mt-12">
                         <h2 class="font-display text-3xl font-semibold uppercase text-navy-950">Project Gallery</h2>
-                        <div class="mt-6 grid gap-4 sm:grid-cols-2">
+                        <div class="mt-6 grid gap-4 sm:grid-cols-2" data-lightbox-gallery="project-gallery">
                             @foreach ($project->images as $image)
-                                <img src="{{ $image->thumbUrl() ?: $image->url() }}" alt="{{ $image->alt_text ?: $project->title }}" class="h-64 w-full rounded object-cover" width="800" height="600" loading="lazy" decoding="async">
+                                <button
+                                    type="button"
+                                    class="group block w-full overflow-hidden rounded focus:outline-none focus:ring-2 focus:ring-accent-500 focus:ring-offset-2"
+                                    data-lightbox-trigger
+                                    data-lightbox-src="{{ $image->url() }}"
+                                    data-lightbox-alt="{{ $image->alt_text ?: $project->title }}"
+                                    data-lightbox-caption="{{ $image->alt_text ?: '' }}"
+                                    aria-label="Open image {{ $loop->iteration }}: {{ $image->alt_text ?: $project->title }}"
+                                >
+                                    <img src="{{ $image->thumbUrl() ?: $image->url() }}" alt="{{ $image->alt_text ?: $project->title }}" class="h-64 w-full rounded object-cover transition duration-300 group-hover:scale-[1.02]" width="800" height="600" loading="lazy" decoding="async">
+                                </button>
                             @endforeach
                         </div>
                     </div>

@@ -8,7 +8,7 @@
         </div>
         <div class="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
             @foreach ($services as $service)
-                <x-cards.service-card :service="$service" />
+                <x-cards.service-card :service="$service" data-reveal="fade-up" data-reveal-delay="{{ $loop->index * 80 }}" />
             @endforeach
         </div>
     </div>

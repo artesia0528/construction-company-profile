@@ -10,7 +10,7 @@
     ];
 @endphp
 
-<header class="sticky top-0 z-50 border-b border-white/10 bg-navy-950/95 text-white backdrop-blur" data-mobile-nav>
+<header class="sticky top-0 z-50 border-b border-white/10 bg-navy-950/95 text-white backdrop-blur transition-[background-color,box-shadow,border-color] duration-300 data-[scrolled=true]:border-white/5 data-[scrolled=true]:bg-navy-950/98 data-[scrolled=true]:shadow-lg" data-mobile-nav data-scrolled="false">
     <div class="container-site flex h-20 items-center justify-between gap-6">
         <a href="{{ route('home') }}" class="flex items-center gap-3">
             @if ($settings->logoUrl())
