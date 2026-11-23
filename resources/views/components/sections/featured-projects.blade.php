@@ -8,7 +8,9 @@
         </div>
         <div class="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
             @foreach ($projects as $project)
-                <x-cards.project-card :project="$project" data-reveal="fade-up" data-reveal-delay="{{ $loop->index * 80 }}" />
+                <div x-reveal.fade-up.{{ $loop->index * 80 }}>
+                    <x-cards.project-card :project="$project" />
+                </div>
             @endforeach
         </div>
     </div>

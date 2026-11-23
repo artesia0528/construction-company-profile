@@ -14,23 +14,123 @@
                 </div>
 
                 @if ($project->images->isNotEmpty())
-                    <div class="mt-12">
+                    @php
+                        $galleryImages = $project->images->map(fn ($image) => [
+                            'src' => $image->url() ?: '',
+                            'alt' => $image->alt_text ?: $project->title,
+                            'caption' => $image->alt_text ?: '',
+                        ])->values()->all();
+                    @endphp
+
+                    <div
+                        class="mt-12"
+                        x-data="{
+                            open: false,
+                            index: 0,
+                            images: @js($galleryImages),
+                            touchStartX: 0,
+                            touchStartY: 0,
+                            get current() { return this.images[this.index] ?? null; },
+                            get many() { return this.images.length > 1; },
+                            openAt(index, dialog) {
+                                this.index = index;
+                                this.open = true;
+                                dialog.showModal();
+                            },
+                            close(dialog) { dialog.close(); },
+                            next() {
+                                if (this.many) {
+                                    this.index = (this.index + 1) % this.images.length;
+                                }
+                            },
+                            prev() {
+                                if (this.many) {
+                                    this.index = (this.index - 1 + this.images.length) % this.images.length;
+                                }
+                            },
+                            onKeydown(event) {
+                                if (! this.open) {
+                                    return;
+                                }
+
+                                if (event.key === 'ArrowLeft') {
+                                    event.preventDefault();
+                                    this.prev();
+                                }
+
+                                if (event.key === 'ArrowRight') {
+                                    event.preventDefault();
+                                    this.next();
+                                }
+                            },
+                            onTouchStart(event) {
+                                const touch = event.changedTouches[0];
+                                this.touchStartX = touch.clientX;
+                                this.touchStartY = touch.clientY;
+                            },
+                            onTouchEnd(event) {
+                                const touch = event.changedTouches[0];
+                                const deltaX = touch.clientX - this.touchStartX;
+                                const deltaY = touch.clientY - this.touchStartY;
+
+                                if (Math.abs(deltaX) < 40 || Math.abs(deltaX) < Math.abs(deltaY)) {
+                                    return;
+                                }
+
+                                if (deltaX > 0) {
+                                    this.prev();
+                                } else {
+                                    this.next();
+                                }
+                            },
+                        }"
+                        @keydown.window="onKeydown($event)"
+                        x-effect="document.body.classList.toggle('lightbox-open', open)"
+                    >
                         <h2 class="font-display text-3xl font-semibold uppercase text-navy-950">Project Gallery</h2>
-                        <div class="mt-6 grid gap-4 sm:grid-cols-2" data-lightbox-gallery="project-gallery">
+                        <div class="mt-6 grid gap-4 sm:grid-cols-2">
                             @foreach ($project->images as $image)
-                                <button
-                                    type="button"
+                                <a
+                                    href="{{ $image->url() }}"
                                     class="group block w-full overflow-hidden rounded focus:outline-none focus:ring-2 focus:ring-accent-500 focus:ring-offset-2"
-                                    data-lightbox-trigger
-                                    data-lightbox-src="{{ $image->url() }}"
-                                    data-lightbox-alt="{{ $image->alt_text ?: $project->title }}"
-                                    data-lightbox-caption="{{ $image->alt_text ?: '' }}"
+                                    @click.prevent="openAt({{ $loop->index }}, $refs.viewer)"
                                     aria-label="Open image {{ $loop->iteration }}: {{ $image->alt_text ?: $project->title }}"
                                 >
                                     <img src="{{ $image->thumbUrl() ?: $image->url() }}" alt="{{ $image->alt_text ?: $project->title }}" class="h-64 w-full rounded object-cover transition duration-300 group-hover:scale-[1.02]" width="800" height="600" loading="lazy" decoding="async">
-                                </button>
+                                </a>
                             @endforeach
                         </div>
+
+                        <dialog
+                            x-ref="viewer"
+                            class="lightbox-overlay"
+                            aria-label="Image viewer"
+                            @close="open = false"
+                            @click.self="close($refs.viewer)"
+                            @touchstart.passive="onTouchStart($event)"
+                            @touchend.passive="onTouchEnd($event)"
+                        >
+                            <div class="lightbox-dialog" role="document">
+                                <div class="lightbox-topbar">
+                                    <p class="lightbox-counter" x-text="`${index + 1} / ${images.length}`"></p>
+                                    <button type="button" class="lightbox-close" @click="close($refs.viewer)" aria-label="Close image viewer">
+                                        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                                    </button>
+                                </div>
+                                <div class="lightbox-body">
+                                    <button type="button" class="lightbox-nav lightbox-prev" @click="prev()" :disabled="!many" :class="{ 'lightbox-nav-hidden': !many }" aria-label="Previous image">
+                                        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+                                    </button>
+                                    <figure class="lightbox-figure">
+                                        <img class="lightbox-image" :src="open ? current?.src : null" :alt="current?.alt || ''" width="1600" height="1200">
+                                        <figcaption class="lightbox-caption" x-show="current?.caption" x-text="current?.caption"></figcaption>
+                                    </figure>
+                                    <button type="button" class="lightbox-nav lightbox-next" @click="next()" :disabled="!many" :class="{ 'lightbox-nav-hidden': !many }" aria-label="Next image">
+                                        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </dialog>
                     </div>
                 @endif
             </div>

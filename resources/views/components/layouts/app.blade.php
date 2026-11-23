@@ -30,6 +30,7 @@
     <x-seo.head :meta="$seoMeta" />
     @stack('head')
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @livewireStyles
 </head>
 <body class="min-h-screen bg-white text-slate-800">
     <x-layout.navbar :settings="$settings" />
@@ -37,5 +38,6 @@
         {{ $slot }}
     </main>
     <x-layout.footer :settings="$settings" />
+    @livewireScriptConfig
 </body>
 </html>

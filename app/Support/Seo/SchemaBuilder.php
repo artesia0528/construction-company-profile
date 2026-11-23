@@ -230,6 +230,43 @@ class SchemaBuilder
         return $schema;
     }
 
+    /**
+     * @param  array<int, array{question?: string|null, answer?: string|null}>  $faqs
+     * @return array<string, mixed>|null
+     */
+    public function faqPage(array $faqs): ?array
+    {
+        $entities = [];
+
+        foreach ($faqs as $faq) {
+            $question = $this->string($faq['question'] ?? null);
+            $answer = $this->string($faq['answer'] ?? null);
+
+            if ($question === null || $answer === null) {
+                continue;
+            }
+
+            $entities[] = [
+                '@type' => 'Question',
+                'name' => $question,
+                'acceptedAnswer' => [
+                    '@type' => 'Answer',
+                    'text' => $answer,
+                ],
+            ];
+        }
+
+        if ($entities === []) {
+            return null;
+        }
+
+        return [
+            '@context' => 'https://schema.org',
+            '@type' => 'FAQPage',
+            'mainEntity' => $entities,
+        ];
+    }
+
     private function string(mixed $value): ?string
     {
         if (! is_string($value)) {

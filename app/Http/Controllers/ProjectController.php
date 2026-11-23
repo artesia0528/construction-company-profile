@@ -6,45 +6,29 @@ use App\Models\CompanySetting;
 use App\Models\Project;
 use App\Support\Seo\SchemaBuilder;
 use App\Support\Seo\SeoResolver;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Http\JsonResponse;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
-use Illuminate\Support\Collection;
-use Illuminate\View\View;
 
 class ProjectController extends Controller
 {
-    public function index(Request $request, SeoResolver $seoResolver): View|JsonResponse
+    public function index(Request $request, SeoResolver $seoResolver, SchemaBuilder $schemaBuilder): View
     {
-        $data = $this->projectListing($request);
-
-        if ($request->expectsJson()) {
-            return response()->json([
-                'html' => view('pages.projects.partials.listing', $data)->render(),
-                'url' => $request->fullUrl(),
-                'category' => $data['selectedCategory'],
-            ]);
-        }
-
         $companySetting = CompanySetting::current();
-        $isFiltered = $data['selectedCategory'] !== '';
-
-        $breadcrumbs = [
-            ['label' => 'Home', 'url' => route('home')],
-            ['label' => 'Projects', 'url' => route('projects.index')],
-        ];
+        $description = 'Browse '.$companySetting->company_name.' project portfolio across commercial, residential, and infrastructure sectors.';
 
         return view('pages.projects.index', [
-            ...$data,
             'companySetting' => $companySetting,
             'seo' => $seoResolver->resolve($request, $companySetting, [
                 'title' => 'Projects',
-                'description' => 'Browse '.$companySetting->company_name.' project portfolio across commercial, residential, and infrastructure sectors.',
-                'isFilteredProjects' => $isFiltered,
+                'description' => $description,
+                'isFilteredProjects' => $request->string('category')->toString() !== '',
                 'noindex' => (bool) $companySetting->noindex,
                 'type' => 'website',
-                'breadcrumbs' => $breadcrumbs,
-                'schema' => [app(SchemaBuilder::class)->webPage('CollectionPage', 'Projects', route('projects.index'), 'Browse '.$companySetting->company_name.' project portfolio across commercial, residential, and infrastructure sectors.')],
+                'breadcrumbs' => [
+                    ['label' => 'Home', 'url' => route('home')],
+                    ['label' => 'Projects', 'url' => route('projects.index')],
+                ],
+                'schema' => [$schemaBuilder->webPage('CollectionPage', 'Projects', route('projects.index'), $description)],
             ]),
         ]);
     }
@@ -87,33 +71,5 @@ class ProjectController extends Controller
                 'schema' => [app(SchemaBuilder::class)->project($project, route('projects.show', $project))],
             ]),
         ]);
-    }
-
-    /**
-     * @return array{projects: LengthAwarePaginator, categories: Collection<int, string>, selectedCategory: string}
-     */
-    private function projectListing(Request $request): array
-    {
-        $category = $request->string('category')->toString();
-
-        $projects = Project::query()
-            ->published()
-            ->when($category !== '', fn ($query) => $query->where('category', $category))
-            ->latestCompleted()
-            ->paginate(9)
-            ->withQueryString();
-
-        $categories = Project::query()
-            ->published()
-            ->whereNotNull('category')
-            ->distinct()
-            ->orderBy('category')
-            ->pluck('category');
-
-        return [
-            'projects' => $projects,
-            'categories' => $categories,
-            'selectedCategory' => $category,
-        ];
     }
 }

@@ -3,7 +3,7 @@
 use App\Models\Project;
 use App\Models\ProjectImage;
 
-test('project detail renders gallery lightbox triggers', function () {
+test('project detail renders an alpine gallery dialog', function () {
     $project = Project::factory()->create(['is_published' => true]);
     ProjectImage::factory()->create([
         'project_id' => $project->id,
@@ -15,8 +15,11 @@ test('project detail renders gallery lightbox triggers', function () {
     $response = $this->get(route('projects.show', $project));
 
     $response->assertOk()
-        ->assertSee('data-lightbox-gallery="project-gallery"', false)
-        ->assertSee('data-lightbox-trigger', false)
-        ->assertSee('data-lightbox-src=', false)
-        ->assertSee('Open image 1: Sample gallery image', false);
+        ->assertSee('@click.prevent="openAt(0, $refs.viewer)"', false)
+        ->assertSee('x-ref="viewer"', false)
+        ->assertSee('aria-label="Image viewer"', false)
+        ->assertSee('showModal()', false)
+        ->assertSee('Open image 1: Sample gallery image', false)
+        ->assertDontSee('data-lightbox-gallery', false)
+        ->assertDontSee('data-lightbox-trigger', false);
 });

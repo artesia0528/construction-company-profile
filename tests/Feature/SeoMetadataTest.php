@@ -221,6 +221,21 @@ test('static pages render expected schema types', function () {
         ->assertSee('"@type": "BreadcrumbList"', false);
 });
 
+test('contact page renders faq content and schema from config', function () {
+    $this->seed();
+
+    config()->set('contact.faqs', [
+        ['question' => 'Custom FAQ?', 'answer' => 'Custom FAQ answer.'],
+    ]);
+
+    $this->get(route('contact'))->assertOk()
+        ->assertSee('Custom FAQ?')
+        ->assertSee('Custom FAQ answer.')
+        ->assertSee('"@type": "FAQPage"', false)
+        ->assertSee('"name": "Custom FAQ?"', false)
+        ->assertSee('"text": "Custom FAQ answer."', false);
+});
+
 test('company setting noindex applies to all public static pages', function () {
     $this->seed();
     CompanySetting::current()->update(['noindex' => true]);

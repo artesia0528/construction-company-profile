@@ -10,7 +10,25 @@
     ];
 @endphp
 
-<header class="sticky top-0 z-50 border-b border-white/10 bg-navy-950/95 text-white backdrop-blur transition-[background-color,box-shadow,border-color] duration-300 data-[scrolled=true]:border-white/5 data-[scrolled=true]:bg-navy-950/98 data-[scrolled=true]:shadow-lg" data-mobile-nav data-scrolled="false">
+<header
+    x-data="{
+        open: false,
+        scrolled: window.scrollY > 12,
+        close(restoreFocus = false) {
+            this.open = false;
+
+            if (restoreFocus) {
+                this.$refs.toggle.focus();
+            }
+        },
+    }"
+    @scroll.window="scrolled = window.scrollY > 12"
+    @resize.window="if (window.innerWidth >= 768) { open = false }"
+    @keydown.escape.window="if (open) { close(true) }"
+    data-scrolled="false"
+    :data-scrolled="scrolled ? 'true' : 'false'"
+    class="site-header sticky top-0 z-50 border-b border-white/10 bg-navy-950/95 text-white backdrop-blur transition-[background-color,box-shadow,border-color] duration-300 data-[scrolled=true]:border-white/5 data-[scrolled=true]:bg-navy-950/98 data-[scrolled=true]:shadow-lg"
+>
     <div class="container-site flex h-20 items-center justify-between gap-6">
         <a href="{{ route('home') }}" class="flex items-center gap-3">
             @if ($settings->logoUrl())
@@ -37,12 +55,33 @@
             <x-ui.button href="{{ route('contact') }}" variant="primary">Get a Quote</x-ui.button>
         </div>
 
-        <button type="button" class="inline-flex items-center justify-center rounded border border-white/20 p-2 md:hidden" data-mobile-nav-toggle aria-label="Toggle menu" aria-expanded="false" aria-controls="mobile-nav">
-            <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        <button
+            type="button"
+            x-ref="toggle"
+            @click="open = ! open"
+            @click.away="open = false"
+            class="inline-flex items-center justify-center rounded border border-white/20 p-2 md:hidden focus:outline-none focus:ring-2 focus:ring-accent-500"
+            aria-label="Toggle menu"
+            :aria-label="open ? 'Close menu' : 'Open menu'"
+            aria-controls="mobile-nav"
+            :aria-expanded="open ? 'true' : 'false'"
+        >
+            <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
         </button>
     </div>
 
-    <div id="mobile-nav" class="hidden border-t border-white/10 bg-navy-900 md:hidden" data-mobile-nav-panel>
+    <div
+        id="mobile-nav"
+        x-cloak
+        x-show="open"
+        x-transition:enter="transition duration-200 ease-out"
+        x-transition:enter-start="opacity-0 -translate-y-2"
+        x-transition:enter-end="opacity-100 translate-y-0"
+        x-transition:leave="transition duration-150 ease-in"
+        x-transition:leave-start="opacity-100 translate-y-0"
+        x-transition:leave-end="opacity-0 -translate-y-2"
+        class="mobile-nav-panel absolute inset-x-0 top-full max-h-[calc(100vh-5rem)] overflow-y-auto border-t border-white/10 bg-navy-900 shadow-xl md:hidden"
+    >
         <nav class="container-site flex flex-col py-4" aria-label="Mobile navigation">
             @foreach ($links as $link)
                 <a href="{{ route($link['route']) }}" class="py-3 text-sm font-semibold uppercase tracking-wide {{ request()->routeIs($link['route'].'*') ? 'text-accent-500' : 'text-white/90' }}">{{ $link['label'] }}</a>

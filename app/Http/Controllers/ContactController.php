@@ -17,15 +17,25 @@ class ContactController extends Controller
     public function show(Request $request, SeoResolver $seoResolver): View
     {
         $companySetting = CompanySetting::current();
+        $faqs = config('contact.faqs', []);
+        $description = 'Contact '.$companySetting->company_name.' for consultation, quotations, and project inquiries.';
+        $schemaBuilder = app(SchemaBuilder::class);
+        $schema = [$schemaBuilder->webPage('ContactPage', 'Contact', route('contact'), $description)];
+        $faqSchema = $schemaBuilder->faqPage($faqs);
+
+        if ($faqSchema !== null) {
+            $schema[] = $faqSchema;
+        }
 
         return view('pages.contact', [
             'companySetting' => $companySetting,
+            'faqs' => $faqs,
             'seo' => $seoResolver->resolve($request, $companySetting, [
                 'title' => 'Contact',
-                'description' => 'Contact '.$companySetting->company_name.' for consultation, quotations, and project inquiries.',
+                'description' => $description,
                 'noindex' => (bool) $companySetting->noindex,
                 'breadcrumbs' => [['label' => 'Home', 'url' => route('home')], ['label' => 'Contact', 'url' => route('contact')]],
-                'schema' => [app(SchemaBuilder::class)->webPage('ContactPage', 'Contact', route('contact'), 'Contact '.$companySetting->company_name.' for consultation, quotations, and project inquiries.')],
+                'schema' => $schema,
             ]),
         ]);
     }

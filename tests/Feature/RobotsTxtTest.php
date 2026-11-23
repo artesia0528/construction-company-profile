@@ -14,6 +14,7 @@ test('robots txt returns crawl rules and sitemap', function () {
     $response->assertOk();
     $this->assertStringContainsString('text/plain', (string) $response->headers->get('content-type'));
     $response->assertSee('User-agent: *', false);
+    $response->assertSee('Disallow: /admin', false);
     $response->assertSee('Disallow:', false);
     $response->assertSee('Sitemap: https://example.com/sitemap.xml', false);
 });
