@@ -79,6 +79,7 @@ DB_DATABASE=construction_company_profile
 DB_USERNAME=postgres
 DB_PASSWORD=your_password
 FILESYSTEM_DISK=public
+MEDIA_DISK=public
 ```
 
 5. Run migrations and seed demo data:
@@ -145,8 +146,22 @@ php artisan migrate:fresh --seed # Reset DB with demo data
 2. Keep it reusable with props/slots; avoid business logic.
 3. Use it in pages/sections instead of duplicating markup.
 
+## Image Optimization
+
+- Uploaded images are optimized through `App\Support\ImageProcessor`: resize max 1920px (longest side), convert to WebP quality 80, and generate `{name}_thumb.webp`.
+- If GD/Imagick/WebP support is unavailable, upload falls back to storing the original file and logs a warning.
+- Legacy images can be migrated with:
+
+```bash
+php artisan images:optimize-legacy --dry-run
+php artisan images:optimize-legacy --cleanup
+```
+
+- `--dry-run` reports without writing; `--cleanup` removes old files only after new paths are saved. Use `--model=Service` (or other model basename/FQCN) to limit scope.
+- Ensure PHP has `gd` or `imagick` with WebP support on the target server.
+
 ## Notes
 
 - Tests use SQLite in-memory (`phpunit.xml`), so app DB can remain PostgreSQL.
-- Uploaded images use the `public` disk; run `php artisan storage:link`.
+- Uploaded images use the configured `MEDIA_DISK` (default `public`); run `php artisan storage:link`.
 - Demo content uses “Nusantara Build Construction” placeholder company data.
