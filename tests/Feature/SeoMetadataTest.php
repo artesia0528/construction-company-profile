@@ -220,3 +220,18 @@ test('static pages render expected schema types', function () {
         ->assertSee('"@type": "CollectionPage"', false)
         ->assertSee('"@type": "BreadcrumbList"', false);
 });
+
+test('company setting noindex applies to all public static pages', function () {
+    $this->seed();
+    CompanySetting::current()->update(['noindex' => true]);
+
+    foreach ([route('home'), route('about'), route('services.index'), route('projects.index'), route('contact')] as $url) {
+        $this->get($url)->assertOk()->assertSee('<meta name="robots" content="noindex,follow">', false);
+    }
+
+    $service = Service::query()->where('is_active', true)->firstOrFail();
+    $project = Project::query()->where('is_published', true)->firstOrFail();
+
+    $this->get(route('services.show', $service))->assertOk()->assertSee('<meta name="robots" content="index,follow">', false);
+    $this->get(route('projects.show', $project))->assertOk()->assertSee('<meta name="robots" content="index,follow">', false);
+});

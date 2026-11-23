@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\CompanySetting;
 use App\Models\Project;
 use App\Models\Service;
 use Illuminate\Support\Facades\URL;
@@ -46,4 +47,23 @@ test('sitemap excludes noindex services and projects', function () {
     $response->assertOk();
     $response->assertDontSee(route('services.show', $service), false);
     $response->assertDontSee(route('projects.show', $project), false);
+});
+
+test('sitemap excludes static pages when company setting noindex is enabled', function () {
+    $this->seed();
+    CompanySetting::current()->update(['noindex' => true]);
+
+    $service = Service::query()->where('is_active', true)->where('noindex', false)->firstOrFail();
+    $project = Project::query()->where('is_published', true)->where('noindex', false)->firstOrFail();
+
+    $response = $this->get('/sitemap.xml');
+
+    $response->assertOk();
+    $response->assertDontSee('<loc>'.route('home').'</loc>', false);
+    $response->assertDontSee('<loc>'.route('about').'</loc>', false);
+    $response->assertDontSee('<loc>'.route('services.index').'</loc>', false);
+    $response->assertDontSee('<loc>'.route('projects.index').'</loc>', false);
+    $response->assertDontSee('<loc>'.route('contact').'</loc>', false);
+    $response->assertSee('<loc>'.route('services.show', $service).'</loc>', false);
+    $response->assertSee('<loc>'.route('projects.show', $project).'</loc>', false);
 });

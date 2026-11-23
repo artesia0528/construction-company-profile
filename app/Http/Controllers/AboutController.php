@@ -23,6 +23,7 @@ class AboutController extends Controller
             'seo' => $seoResolver->resolve($request, $companySetting, [
                 'title' => 'About Us',
                 'description' => 'Learn about '.$companySetting->company_name.', our history, vision, mission, and team.',
+                'noindex' => (bool) $companySetting->noindex,
                 'breadcrumbs' => [['label' => 'Home', 'url' => route('home')], ['label' => 'About Us', 'url' => route('about')]],
                 'schema' => [app(SchemaBuilder::class)->webPage('AboutPage', 'About Us', route('about'), 'Learn about '.$companySetting->company_name.', our history, vision, mission, and team.')],
             ]),

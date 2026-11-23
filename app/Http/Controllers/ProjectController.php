@@ -41,6 +41,7 @@ class ProjectController extends Controller
                 'title' => 'Projects',
                 'description' => 'Browse '.$companySetting->company_name.' project portfolio across commercial, residential, and infrastructure sectors.',
                 'isFilteredProjects' => $isFiltered,
+                'noindex' => (bool) $companySetting->noindex,
                 'type' => 'website',
                 'breadcrumbs' => $breadcrumbs,
                 'schema' => [app(SchemaBuilder::class)->webPage('CollectionPage', 'Projects', route('projects.index'), 'Browse '.$companySetting->company_name.' project portfolio across commercial, residential, and infrastructure sectors.')],

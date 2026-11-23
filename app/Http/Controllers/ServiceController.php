@@ -21,6 +21,7 @@ class ServiceController extends Controller
             'seo' => $seoResolver->resolve($request, $companySetting, [
                 'title' => 'Services',
                 'description' => 'Explore '.$companySetting->company_name.' services for building, infrastructure, renovation, and project management.',
+                'noindex' => (bool) $companySetting->noindex,
                 'breadcrumbs' => [['label' => 'Home', 'url' => route('home')], ['label' => 'Services', 'url' => route('services.index')]],
                 'schema' => [app(SchemaBuilder::class)->webPage('CollectionPage', 'Services', route('services.index'), 'Explore '.$companySetting->company_name.' services for building, infrastructure, renovation, and project management.')],
             ]),

@@ -119,7 +119,9 @@ class ManageCompanySetting extends Page
                             ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
                             ->saveUploadedFileUsing(fn ($file): string => ImageProcessor::process($file, 'settings'))
                             ->deleteUploadedFileUsing(fn (?string $file): ?bool => $file ? (ImageProcessor::delete($file) ?? true) : null),
-                        Toggle::make('noindex')->label('Noindex this site page context')->helperText('Sets meta robots to noindex,follow when used.'),
+                        Toggle::make('noindex')
+                            ->label('Noindex static public pages')
+                            ->helperText('When enabled, public static pages (home, about, services, projects, contact) render noindex,follow and static URLs are removed from sitemap. Service/project detail noindex remains per record.'),
                     ]),
             ]);
     }

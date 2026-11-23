@@ -2,6 +2,7 @@
 
 namespace App\Support\Seo;
 
+use App\Models\CompanySetting;
 use App\Models\Project;
 use App\Models\Service;
 
@@ -12,13 +13,17 @@ class SitemapBuilder
      */
     public function entries(): array
     {
-        $entries = collect([
-            ['loc' => route('home'), 'lastmod' => null],
-            ['loc' => route('about'), 'lastmod' => null],
-            ['loc' => route('services.index'), 'lastmod' => null],
-            ['loc' => route('projects.index'), 'lastmod' => null],
-            ['loc' => route('contact'), 'lastmod' => null],
-        ]);
+        $globalNoindex = (bool) CompanySetting::current()->noindex;
+
+        $entries = $globalNoindex
+            ? collect()
+            : collect([
+                ['loc' => route('home'), 'lastmod' => null],
+                ['loc' => route('about'), 'lastmod' => null],
+                ['loc' => route('services.index'), 'lastmod' => null],
+                ['loc' => route('projects.index'), 'lastmod' => null],
+                ['loc' => route('contact'), 'lastmod' => null],
+            ]);
 
         $services = Service::query()
             ->active()

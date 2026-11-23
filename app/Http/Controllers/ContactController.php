@@ -23,6 +23,7 @@ class ContactController extends Controller
             'seo' => $seoResolver->resolve($request, $companySetting, [
                 'title' => 'Contact',
                 'description' => 'Contact '.$companySetting->company_name.' for consultation, quotations, and project inquiries.',
+                'noindex' => (bool) $companySetting->noindex,
                 'breadcrumbs' => [['label' => 'Home', 'url' => route('home')], ['label' => 'Contact', 'url' => route('contact')]],
                 'schema' => [app(SchemaBuilder::class)->webPage('ContactPage', 'Contact', route('contact'), 'Contact '.$companySetting->company_name.' for consultation, quotations, and project inquiries.')],
             ]),
