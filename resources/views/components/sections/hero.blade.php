@@ -1,7 +1,8 @@
 @props(['settings'])
 
 <section class="relative overflow-hidden bg-navy-950 text-white">
-    <div class="absolute inset-0 bg-[linear-gradient(to_right,rgba(11,18,32,.92),rgba(11,18,32,.45)),url('https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=1600&q=80')] bg-cover bg-center"></div>
+    <img src="{{ $settings->heroImageUrl() ?? 'https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=1600&q=80' }}" alt="{{ $settings->hero_alt_text ?: ($settings->company_name.' hero') }}" class="absolute inset-0 h-full w-full object-cover" width="1600" height="900" loading="eager" fetchpriority="high" decoding="async">
+    <div class="absolute inset-0 bg-[linear-gradient(to_right,rgba(11,18,32,.92),rgba(11,18,32,.45))]"></div>
     <div class="container-site relative grid min-h-[78vh] items-center gap-12 py-24 lg:grid-cols-2">
         <div>
             <p class="font-display text-sm font-semibold uppercase tracking-[0.3em] text-accent-500">Professional Construction Partner</p>

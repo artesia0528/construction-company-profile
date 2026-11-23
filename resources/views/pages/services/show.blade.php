@@ -4,7 +4,7 @@
     <section class="section-pad">
         <div class="container-site grid gap-12 lg:grid-cols-3">
             <div class="lg:col-span-2">
-                <img src="{{ $service->thumbnailUrl() ?? 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1400&q=80' }}" alt="{{ $service->name }}" class="h-[420px] w-full rounded object-cover" loading="lazy">
+                <img src="{{ $service->thumbnailUrl() ?? 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1400&q=80' }}" alt="{{ $service->thumbnail_alt_text ?: $service->name }}" class="h-[420px] w-full rounded object-cover" width="1400" height="933" loading="eager" fetchpriority="high" decoding="async">
                 <div class="mt-8 space-y-5 leading-8 text-steel-700">
                     @foreach (preg_split('/\n\s*\n/', (string) $service->full_description) as $paragraph)
                         @if (trim($paragraph) !== '')

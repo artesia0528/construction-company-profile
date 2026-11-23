@@ -13,7 +13,11 @@
 <header class="sticky top-0 z-50 border-b border-white/10 bg-navy-950/95 text-white backdrop-blur" data-mobile-nav>
     <div class="container-site flex h-20 items-center justify-between gap-6">
         <a href="{{ route('home') }}" class="flex items-center gap-3">
-            <div class="flex h-11 w-11 items-center justify-center rounded bg-accent-500 font-display text-xl font-bold text-navy-950">NB</div>
+            @if ($settings->logoUrl())
+                <img src="{{ $settings->logoUrl() }}" alt="{{ $settings->company_name }}" class="h-11 w-auto" width="160" height="44" loading="eager" fetchpriority="high" decoding="async">
+            @else
+                <div class="flex h-11 w-11 items-center justify-center rounded bg-accent-500 font-display text-xl font-bold text-navy-950">NB</div>
+            @endif
             <div>
                 <p class="font-display text-2xl font-semibold leading-none">{{ $settings->company_name }}</p>
                 <p class="text-xs uppercase tracking-[0.2em] text-steel-200">Construction Company</p>

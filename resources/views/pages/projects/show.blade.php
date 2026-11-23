@@ -4,7 +4,7 @@
     <section class="section-pad">
         <div class="container-site grid gap-12 lg:grid-cols-3">
             <div class="lg:col-span-2">
-                <img src="{{ $project->coverImageUrl() ?? 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1400&q=80' }}" alt="{{ $project->title }}" class="h-[440px] w-full rounded object-cover" loading="lazy">
+                <img src="{{ $project->coverImageUrl() ?? 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1400&q=80' }}" alt="{{ $project->cover_alt_text ?: $project->title }}" class="h-[440px] w-full rounded object-cover" width="1400" height="933" loading="eager" fetchpriority="high" decoding="async">
                 <div class="mt-8 space-y-5 leading-8 text-steel-700">
                     @foreach (preg_split('/\n\s*\n/', (string) $project->full_description) as $paragraph)
                         @if (trim($paragraph) !== '')
@@ -18,7 +18,7 @@
                         <h2 class="font-display text-3xl font-semibold uppercase text-navy-950">Project Gallery</h2>
                         <div class="mt-6 grid gap-4 sm:grid-cols-2">
                             @foreach ($project->images as $image)
-                                <img src="{{ $image->url() }}" alt="{{ $image->alt_text ?: $project->title }}" class="h-64 w-full rounded object-cover" loading="lazy">
+                                <img src="{{ $image->thumbUrl() ?: $image->url() }}" alt="{{ $image->alt_text ?: $project->title }}" class="h-64 w-full rounded object-cover" width="800" height="600" loading="lazy" decoding="async">
                             @endforeach
                         </div>
                     </div>

@@ -3,7 +3,7 @@
 <section class="section-pad">
     <div class="container-site grid items-center gap-12 lg:grid-cols-2">
         <div>
-            <img src="{{ $settings->heroImageUrl() ?? 'https://images.unsplash.com/photo-1590644365607-1c5fc09571e5?auto=format&fit=crop&w=1200&q=80' }}" alt="Construction team at work" class="h-[420px] w-full rounded object-cover shadow-lg" loading="lazy">
+            <img src="{{ $settings->heroImageUrl() ?? 'https://images.unsplash.com/photo-1590644365607-1c5fc09571e5?auto=format&fit=crop&w=1200&q=80' }}" alt="{{ $settings->hero_alt_text ?: ($settings->company_name.' team') }}" class="h-[420px] w-full rounded object-cover shadow-lg" width="1200" height="800" loading="lazy" decoding="async">
         </div>
         <div>
             <x-ui.section-heading eyebrow="About Company" :title="$settings->company_name" :description="$settings->company_intro" />
