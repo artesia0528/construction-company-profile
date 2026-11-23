@@ -3,6 +3,7 @@
 namespace App\Filament\Pages;
 
 use App\Models\CompanySetting;
+use App\Support\ImageProcessor;
 use BackedEnum;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Textarea;
@@ -50,14 +51,31 @@ class ManageCompanySetting extends Page
                         TextInput::make('whatsapp_number')->maxLength(255),
                         TextInput::make('company_address')->columnSpanFull()->maxLength(255),
                         Textarea::make('company_description')->rows(4)->columnSpanFull(),
-                        FileUpload::make('company_logo')->image()->disk('public')->visibility('public')->directory('settings'),
+                        FileUpload::make('company_logo')
+                            ->image()
+                            ->disk(config('filesystems.media_disk', 'public'))
+                            ->visibility('public')
+                            ->directory('settings')
+                            ->maxSize(2048)
+                            ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
+                            ->saveUploadedFileUsing(fn ($file): string => ImageProcessor::process($file, 'settings'))
+                            ->deleteUploadedFileUsing(fn (?string $file): ?bool => $file ? (ImageProcessor::delete($file) ?? true) : null),
                     ]),
                 Section::make('Hero & Intro')
                     ->columns(2)
                     ->schema([
                         TextInput::make('hero_headline')->maxLength(255)->columnSpanFull(),
                         Textarea::make('hero_description')->rows(3)->columnSpanFull(),
-                        FileUpload::make('hero_image')->image()->disk('public')->visibility('public')->directory('settings'),
+                        FileUpload::make('hero_image')
+                            ->image()
+                            ->disk(config('filesystems.media_disk', 'public'))
+                            ->visibility('public')
+                            ->directory('settings')
+                            ->maxSize(2048)
+                            ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
+                            ->saveUploadedFileUsing(fn ($file): string => ImageProcessor::process($file, 'settings'))
+                            ->deleteUploadedFileUsing(fn (?string $file): ?bool => $file ? (ImageProcessor::delete($file) ?? true) : null),
+                        TextInput::make('hero_alt_text')->maxLength(255),
                         TextInput::make('hero_primary_cta_label')->maxLength(255),
                         TextInput::make('hero_primary_cta_url')->maxLength(255),
                         TextInput::make('hero_secondary_cta_label')->maxLength(255),

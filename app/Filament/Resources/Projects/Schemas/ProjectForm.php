@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Projects\Schemas;
 
+use App\Support\ImageProcessor;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Textarea;
@@ -57,9 +58,14 @@ class ProjectForm
                     ->schema([
                         FileUpload::make('cover_image')
                             ->image()
-                            ->disk('public')
+                            ->disk(config('filesystems.media_disk', 'public'))
                             ->visibility('public')
-                            ->directory('projects/covers'),
+                            ->directory('projects/covers')
+                            ->maxSize(2048)
+                            ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
+                            ->saveUploadedFileUsing(fn ($file): string => ImageProcessor::process($file, 'projects/covers'))
+                            ->deleteUploadedFileUsing(fn (?string $file): ?bool => $file ? (ImageProcessor::delete($file) ?? true) : null),
+                        TextInput::make('cover_alt_text')->maxLength(255)->columnSpanFull(),
                         Repeater::make('images')
                             ->relationship()
                             ->defaultItems(0)
@@ -67,9 +73,13 @@ class ProjectForm
                                 FileUpload::make('image_path')
                                     ->label('Image')
                                     ->image()
-                                    ->disk('public')
+                                    ->disk(config('filesystems.media_disk', 'public'))
                                     ->visibility('public')
                                     ->directory('projects/gallery')
+                                    ->maxSize(2048)
+                                    ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
+                                    ->saveUploadedFileUsing(fn ($file): string => ImageProcessor::process($file, 'projects/gallery'))
+                                    ->deleteUploadedFileUsing(fn (?string $file): ?bool => $file ? (ImageProcessor::delete($file) ?? true) : null)
                                     ->required(),
                                 TextInput::make('alt_text')->maxLength(255),
                                 TextInput::make('sort_order')->numeric()->default(0),

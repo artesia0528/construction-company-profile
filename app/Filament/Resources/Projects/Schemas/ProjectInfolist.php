@@ -32,6 +32,7 @@ class ProjectInfolist
                     ->placeholder('-'),
                 TextEntry::make('status'),
                 ImageEntry::make('cover_image')
+                    ->disk(config('filesystems.media_disk', 'public'))
                     ->placeholder('-'),
                 IconEntry::make('is_featured')
                     ->boolean(),

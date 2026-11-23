@@ -24,6 +24,7 @@ class ServiceInfolist
                 TextEntry::make('icon')
                     ->placeholder('-'),
                 ImageEntry::make('thumbnail_image')
+                    ->disk(config('filesystems.media_disk', 'public'))
                     ->placeholder('-'),
                 TextEntry::make('display_order')
                     ->numeric(),

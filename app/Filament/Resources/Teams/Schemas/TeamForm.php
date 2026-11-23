@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Teams\Schemas;
 
+use App\Support\ImageProcessor;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -27,9 +28,14 @@ class TeamForm
                     ->schema([
                         FileUpload::make('profile_photo')
                             ->image()
-                            ->disk('public')
+                            ->disk(config('filesystems.media_disk', 'public'))
                             ->visibility('public')
-                            ->directory('teams'),
+                            ->directory('teams')
+                            ->maxSize(2048)
+                            ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
+                            ->saveUploadedFileUsing(fn ($file): string => ImageProcessor::process($file, 'teams'))
+                            ->deleteUploadedFileUsing(fn (?string $file): ?bool => $file ? (ImageProcessor::delete($file) ?? true) : null),
+                        TextInput::make('photo_alt_text')->maxLength(255),
                         TextInput::make('display_order')->numeric()->default(0)->required(),
                         Toggle::make('is_active')->default(true)->required(),
                     ]),

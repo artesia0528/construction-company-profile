@@ -2,17 +2,19 @@
 
 namespace App\Models;
 
+use App\Support\HandlesImageMedia;
 use Database\Factories\ServiceFactory;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class Service extends Model
 {
     /** @use HasFactory<ServiceFactory> */
+    use HandlesImageMedia;
+
     use HasFactory;
 
     protected $fillable = [
@@ -22,6 +24,7 @@ class Service extends Model
         'full_description',
         'icon',
         'thumbnail_image',
+        'thumbnail_alt_text',
         'display_order',
         'is_active',
     ];
@@ -51,9 +54,19 @@ class Service extends Model
         return 'slug';
     }
 
+    public static function imageMediaFields(): array
+    {
+        return ['thumbnail_image'];
+    }
+
     public function thumbnailUrl(): ?string
     {
-        return $this->thumbnail_image ? Storage::disk('public')->url($this->thumbnail_image) : null;
+        return $this->imageUrl($this->thumbnail_image);
+    }
+
+    public function thumbnailThumbUrl(): ?string
+    {
+        return $this->imageThumbUrl($this->thumbnail_image);
     }
 
     protected static function booted(): void

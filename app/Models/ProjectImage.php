@@ -2,15 +2,17 @@
 
 namespace App\Models;
 
+use App\Support\HandlesImageMedia;
 use Database\Factories\ProjectImageFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Support\Facades\Storage;
 
 class ProjectImage extends Model
 {
     /** @use HasFactory<ProjectImageFactory> */
+    use HandlesImageMedia;
+
     use HasFactory;
 
     protected $fillable = [
@@ -32,8 +34,18 @@ class ProjectImage extends Model
         return $this->belongsTo(Project::class);
     }
 
-    public function url(): string
+    public static function imageMediaFields(): array
     {
-        return Storage::disk('public')->url($this->image_path);
+        return ['image_path'];
+    }
+
+    public function url(): ?string
+    {
+        return $this->imageUrl($this->image_path);
+    }
+
+    public function thumbUrl(): ?string
+    {
+        return $this->imageThumbUrl($this->image_path);
     }
 }

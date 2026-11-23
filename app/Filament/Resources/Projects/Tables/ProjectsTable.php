@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Projects\Tables;
 
 use App\Models\Project;
+use App\Support\ImageProcessor;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
@@ -19,7 +20,10 @@ class ProjectsTable
     {
         return $table
             ->columns([
-                ImageColumn::make('cover_image')->disk('public')->square(),
+                ImageColumn::make('cover_image')
+                    ->disk(config('filesystems.media_disk', 'public'))
+                    ->getStateUsing(fn (Project $record): ?string => filled($record->cover_image) ? (ImageProcessor::thumbPath($record->cover_image) ?: $record->cover_image) : null)
+                    ->square(),
                 TextColumn::make('title')->searchable()->sortable(),
                 TextColumn::make('category')->searchable()->sortable(),
                 TextColumn::make('location')->searchable()->toggleable(),

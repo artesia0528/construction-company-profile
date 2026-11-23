@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Services\Schemas;
 
+use App\Support\ImageProcessor;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -53,9 +54,13 @@ class ServiceForm
                             ->required(),
                         FileUpload::make('thumbnail_image')
                             ->image()
-                            ->disk('public')
+                            ->disk(config('filesystems.media_disk', 'public'))
                             ->visibility('public')
                             ->directory('services')
+                            ->maxSize(2048)
+                            ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
+                            ->saveUploadedFileUsing(fn ($file): string => ImageProcessor::process($file, 'services'))
+                            ->deleteUploadedFileUsing(fn (?string $file): ?bool => $file ? (ImageProcessor::delete($file) ?? true) : null)
                             ->columnSpanFull(),
                         Toggle::make('is_active')
                             ->default(true)

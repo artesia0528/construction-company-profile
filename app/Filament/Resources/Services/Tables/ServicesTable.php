@@ -2,6 +2,8 @@
 
 namespace App\Filament\Resources\Services\Tables;
 
+use App\Models\Service;
+use App\Support\ImageProcessor;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
@@ -18,7 +20,8 @@ class ServicesTable
         return $table
             ->columns([
                 ImageColumn::make('thumbnail_image')
-                    ->disk('public')
+                    ->disk(config('filesystems.media_disk', 'public'))
+                    ->getStateUsing(fn (Service $record): ?string => filled($record->thumbnail_image) ? (ImageProcessor::thumbPath($record->thumbnail_image) ?: $record->thumbnail_image) : null)
                     ->square(),
                 TextColumn::make('name')
                     ->searchable()

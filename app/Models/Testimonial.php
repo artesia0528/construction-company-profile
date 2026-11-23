@@ -2,16 +2,18 @@
 
 namespace App\Models;
 
+use App\Support\HandlesImageMedia;
 use Database\Factories\TestimonialFactory;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Storage;
 
 class Testimonial extends Model
 {
     /** @use HasFactory<TestimonialFactory> */
+    use HandlesImageMedia;
+
     use HasFactory;
 
     protected $fillable = [
@@ -20,6 +22,7 @@ class Testimonial extends Model
         'company_name',
         'testimonial_content',
         'client_photo',
+        'photo_alt_text',
         'rating',
         'is_active',
     ];
@@ -38,8 +41,18 @@ class Testimonial extends Model
         return $query->where('is_active', true);
     }
 
+    public static function imageMediaFields(): array
+    {
+        return ['client_photo'];
+    }
+
     public function photoUrl(): ?string
     {
-        return $this->client_photo ? Storage::disk('public')->url($this->client_photo) : null;
+        return $this->imageUrl($this->client_photo);
+    }
+
+    public function photoThumbUrl(): ?string
+    {
+        return $this->imageThumbUrl($this->client_photo);
     }
 }

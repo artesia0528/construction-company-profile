@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Testimonials\Schemas;
 
+use App\Support\ImageProcessor;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -29,9 +30,14 @@ class TestimonialForm
                     ->schema([
                         FileUpload::make('client_photo')
                             ->image()
-                            ->disk('public')
+                            ->disk(config('filesystems.media_disk', 'public'))
                             ->visibility('public')
-                            ->directory('testimonials'),
+                            ->directory('testimonials')
+                            ->maxSize(2048)
+                            ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
+                            ->saveUploadedFileUsing(fn ($file): string => ImageProcessor::process($file, 'testimonials'))
+                            ->deleteUploadedFileUsing(fn (?string $file): ?bool => $file ? (ImageProcessor::delete($file) ?? true) : null),
+                        TextInput::make('photo_alt_text')->maxLength(255),
                         Toggle::make('is_active')->default(true)->required(),
                     ]),
             ]);

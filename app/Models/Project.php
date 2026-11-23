@@ -2,18 +2,20 @@
 
 namespace App\Models;
 
+use App\Support\HandlesImageMedia;
 use Database\Factories\ProjectFactory;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class Project extends Model
 {
     /** @use HasFactory<ProjectFactory> */
+    use HandlesImageMedia;
+
     use HasFactory;
 
     protected $fillable = [
@@ -27,6 +29,7 @@ class Project extends Model
         'completion_year',
         'status',
         'cover_image',
+        'cover_alt_text',
         'is_featured',
         'is_published',
     ];
@@ -68,9 +71,19 @@ class Project extends Model
         return 'slug';
     }
 
+    public static function imageMediaFields(): array
+    {
+        return ['cover_image'];
+    }
+
     public function coverImageUrl(): ?string
     {
-        return $this->cover_image ? Storage::disk('public')->url($this->cover_image) : null;
+        return $this->imageUrl($this->cover_image);
+    }
+
+    public function coverImageThumbUrl(): ?string
+    {
+        return $this->imageThumbUrl($this->cover_image);
     }
 
     protected static function booted(): void
@@ -79,6 +92,11 @@ class Project extends Model
             if (blank($project->slug) && filled($project->title)) {
                 $project->slug = Str::slug($project->title);
             }
+        });
+
+        static::deleting(function (Project $project): void {
+            $project->loadMissing('images');
+            $project->images->each->delete();
         });
     }
 }
