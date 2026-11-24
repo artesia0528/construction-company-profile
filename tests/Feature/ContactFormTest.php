@@ -64,7 +64,8 @@ test('contact page renders livewire form with post fallback', function () {
 test('livewire contact form validates required fields', function () {
     Livewire::test('contact-form')
         ->call('submit')
-        ->assertHasErrors(['name', 'email', 'subject', 'message']);
+        ->assertHasErrors(['name', 'email', 'subject', 'message'])
+        ->assertSee('wire:transition="form-error"', false);
 
     $this->assertDatabaseEmpty('contact_messages');
 });
@@ -83,7 +84,8 @@ test('livewire contact form stores message and resets fields', function () {
         ->assertSet('sent', true)
         ->assertSet('name', '')
         ->assertSet('email', '')
-        ->assertSee('Thank you for your message. Our team will contact you shortly.');
+        ->assertSee('Thank you for your message. Our team will contact you shortly.')
+        ->assertSee('wire:transition="form-success"', false);
 
     $this->assertDatabaseHas('contact_messages', [
         'email' => 'jane@example.com',

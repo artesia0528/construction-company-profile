@@ -33,8 +33,9 @@
     @livewireStyles
 </head>
 <body class="min-h-screen bg-white text-slate-800">
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[200] focus:rounded focus:bg-accent-500 focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-navy-950">Skip to content</a>
     <x-layout.navbar :settings="$settings" />
-    <main>
+    <main id="main-content" tabindex="-1" wire:transition.navigate>
         {{ $slot }}
     </main>
     <x-layout.footer :settings="$settings" />

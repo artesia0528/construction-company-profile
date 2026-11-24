@@ -1,6 +1,6 @@
 @props(['testimonial'])
 
-<article {{ $attributes->merge(['class' => 'h-full rounded border border-steel-200 bg-white p-8 shadow-sm']) }}>
+<article {{ $attributes->merge(['class' => 'h-full rounded border border-steel-200 bg-white p-8 shadow-sm transition duration-200 hover:-translate-y-1 hover:border-accent-500/60 hover:shadow-md']) }}>
     <div class="text-accent-500">
         @for ($i = 0; $i < 5; $i++)
             <span class="{{ $i < $testimonial->rating ? 'text-accent-500' : 'text-steel-200' }}">★</span>

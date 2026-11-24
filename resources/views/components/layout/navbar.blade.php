@@ -29,8 +29,8 @@
     :data-scrolled="scrolled ? 'true' : 'false'"
     class="site-header sticky top-0 z-50 border-b border-white/10 bg-navy-950/95 text-white backdrop-blur transition-[background-color,box-shadow,border-color] duration-300 data-[scrolled=true]:border-white/5 data-[scrolled=true]:bg-navy-950/98 data-[scrolled=true]:shadow-lg"
 >
-    <div class="container-site flex h-20 items-center justify-between gap-6">
-        <a href="{{ route('home') }}" class="flex items-center gap-3">
+    <div class="container-site flex h-20 items-center justify-between gap-6" data-motion="stagger" data-motion-duration="260">
+        <a href="{{ route('home') }}" class="flex items-center gap-3 rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500 focus-visible:ring-offset-2 focus-visible:ring-offset-navy-950" data-motion-item="true">
             @if ($settings->logoUrl())
                 <img src="{{ $settings->logoUrl() }}" alt="{{ $settings->company_name }}" class="h-11 w-auto" width="160" height="44" loading="eager" fetchpriority="high" decoding="async">
             @else
@@ -42,17 +42,18 @@
             </div>
         </a>
 
-        <nav class="hidden items-center gap-8 md:flex" aria-label="Primary navigation">
+        <nav class="hidden items-center gap-8 md:flex" aria-label="Primary navigation" data-motion-item="true">
             @foreach ($links as $link)
-                <a href="{{ route($link['route']) }}"
-                   class="text-sm font-semibold uppercase tracking-wide transition {{ request()->routeIs($link['route'].'*') ? 'text-accent-500' : 'text-white/90 hover:text-accent-500' }}">
+                <a href="{{ route($link['route']) }}" wire:navigate
+                   @if (request()->routeIs($link['route'].'*')) aria-current="page" @endif
+                   class="relative text-sm font-semibold uppercase tracking-wide transition-colors after:absolute after:-bottom-1 after:left-0 after:h-0.5 after:w-full after:origin-left after:scale-x-0 after:bg-accent-500 after:transition-transform after:duration-200 hover:text-accent-500 hover:after:scale-x-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500 focus-visible:ring-offset-2 focus-visible:ring-offset-navy-950 {{ request()->routeIs($link['route'].'*') ? 'text-accent-500 after:scale-x-100' : 'text-white/90' }}">
                     {{ $link['label'] }}
                 </a>
             @endforeach
         </nav>
 
-        <div class="hidden md:block">
-            <x-ui.button href="{{ route('contact') }}" variant="primary">Get a Quote</x-ui.button>
+        <div class="hidden md:block" data-motion-item="true">
+            <x-ui.button href="{{ route('contact') }}" wire:navigate variant="primary">Get a Quote</x-ui.button>
         </div>
 
         <button
@@ -60,11 +61,12 @@
             x-ref="toggle"
             @click="open = ! open"
             @click.away="open = false"
-            class="inline-flex items-center justify-center rounded border border-white/20 p-2 md:hidden focus:outline-none focus:ring-2 focus:ring-accent-500"
+            class="inline-flex items-center justify-center rounded border border-white/20 p-2 transition-colors hover:border-accent-500 hover:text-accent-500 focus:outline-none focus:ring-2 focus:ring-accent-500 md:hidden"
             aria-label="Toggle menu"
             :aria-label="open ? 'Close menu' : 'Open menu'"
             aria-controls="mobile-nav"
             :aria-expanded="open ? 'true' : 'false'"
+            data-motion-item="true"
         >
             <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
         </button>
@@ -84,9 +86,9 @@
     >
         <nav class="container-site flex flex-col py-4" aria-label="Mobile navigation">
             @foreach ($links as $link)
-                <a href="{{ route($link['route']) }}" class="py-3 text-sm font-semibold uppercase tracking-wide {{ request()->routeIs($link['route'].'*') ? 'text-accent-500' : 'text-white/90' }}">{{ $link['label'] }}</a>
+                <a href="{{ route($link['route']) }}" wire:navigate class="border-l-2 border-transparent py-3 pl-3 text-sm font-semibold uppercase tracking-wide transition-colors hover:border-accent-500/60 hover:text-accent-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500 focus-visible:ring-offset-2 focus-visible:ring-offset-navy-900 {{ request()->routeIs($link['route'].'*') ? 'border-accent-500 text-accent-500' : 'text-white/90' }}" @if (request()->routeIs($link['route'].'*')) aria-current="page" @endif>{{ $link['label'] }}</a>
             @endforeach
-            <div class="pt-3"><x-ui.button href="{{ route('contact') }}" variant="primary" class="w-full">Get a Quote</x-ui.button></div>
+            <div class="pt-3"><x-ui.button href="{{ route('contact') }}" wire:navigate variant="primary" class="w-full">Get a Quote</x-ui.button></div>
         </nav>
     </div>
 </header>

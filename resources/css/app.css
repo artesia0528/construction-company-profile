@@ -1,4 +1,5 @@
 @import 'tailwindcss';
+@import './animations.css';
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../**/*.blade.php';
@@ -24,29 +25,12 @@
     html { scroll-behavior: smooth; }
     body { @apply bg-white text-slate-800 antialiased; font-family: var(--font-sans); }
     h1, h2, h3, h4, .font-display { font-family: var(--font-display); letter-spacing: 0.01em; }
+    :where(a, button, input, textarea, select, summary, [tabindex]:not([tabindex="-1"])):focus-visible { outline: 2px solid var(--color-accent-500); outline-offset: 2px; }
     [x-cloak] { display: none !important; }
-}
-
-@layer components {
-    .reveal { opacity: 0; transition: opacity 600ms ease, transform 600ms ease; will-change: opacity, transform; }
-    .reveal-fade-up { transform: translateY(24px); }
-    .reveal-fade-in { transform: none; }
-    .reveal-fade-left { transform: translateX(24px); }
-    .reveal-fade-right { transform: translateX(-24px); }
-    .reveal.is-revealed { opacity: 1; transform: translate(0, 0); }
 }
 
 @media (scripting: none) {
     .livewire-pagination { display: none; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-    html { scroll-behavior: auto; }
-    .reveal, .reveal-fade-up, .reveal-fade-in, .reveal-fade-left, .reveal-fade-right, .site-header, .mobile-nav-panel, .lightbox-overlay, .lightbox-image {
-        opacity: 1 !important;
-        transform: none !important;
-        transition: none !important;
-    }
 }
 
 @layer components {

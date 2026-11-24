@@ -50,13 +50,13 @@ new class extends Component
 
 <div>
     @if ($sent || session('success'))
-        <div class="mb-6 rounded border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-700" role="status" aria-live="polite">
+        <div class="mb-6 rounded border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-700" role="status" aria-live="polite" wire:transition="form-success">
             {{ $sent ? 'Thank you for your message. Our team will contact you shortly.' : session('success') }}
         </div>
     @endif
 
     @if ($errors->any())
-        <div class="mb-6 rounded border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700" role="alert">
+        <div class="mb-6 rounded border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700" role="alert" wire:transition="form-error">
             Please correct the highlighted fields.
         </div>
     @endif

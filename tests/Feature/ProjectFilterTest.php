@@ -25,6 +25,7 @@ test('project index filters published projects by category', function () {
         ->assertSee('Warehouse Alpha')
         ->assertSee('Office Beta')
         ->assertSee('wire:click.prevent="setCategory(\'Industrial\')"', false)
+        ->assertSee('wire:transition="projects-grid"', false)
         ->call('setCategory', 'Industrial')
         ->assertSet('category', 'Industrial')
         ->assertSee('Warehouse Alpha')
@@ -84,7 +85,8 @@ test('project index shows the empty state when no published projects match', fun
     ]);
 
     Livewire::test(ProjectIndex::class)
-        ->assertSee('No projects found for this category.');
+        ->assertSee('No projects found for this category.')
+        ->assertSee('wire:transition="project-empty"', false);
 });
 
 test('projects page server renders the livewire listing', function () {

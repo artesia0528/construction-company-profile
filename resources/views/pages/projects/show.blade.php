@@ -4,8 +4,8 @@
     <section class="section-pad">
         <div class="container-site grid gap-12 lg:grid-cols-3">
             <div class="lg:col-span-2">
-                <img src="{{ $project->coverImageUrl() ?? 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1400&q=80' }}" alt="{{ $project->cover_alt_text ?: $project->title }}" class="h-[440px] w-full rounded object-cover" width="1400" height="933" loading="eager" fetchpriority="high" decoding="async">
-                <div class="mt-8 space-y-5 leading-8 text-steel-700">
+                <img src="{{ $project->coverImageUrl() ?? 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1400&q=80' }}" alt="{{ $project->cover_alt_text ?: $project->title }}" class="h-[440px] w-full rounded object-cover" width="1400" height="933" loading="eager" fetchpriority="high" decoding="async" data-motion="reveal" data-motion-variant="fade-in">
+                <div class="mt-8 space-y-5 leading-8 text-steel-700" data-motion="reveal" data-motion-delay="80">
                     @foreach (preg_split('/\n\s*\n/', (string) $project->full_description) as $paragraph)
                         @if (trim($paragraph) !== '')
                             <p>{{ trim($paragraph) }}</p>
@@ -88,13 +88,14 @@
                         x-effect="document.body.classList.toggle('lightbox-open', open)"
                     >
                         <h2 class="font-display text-3xl font-semibold uppercase text-navy-950">Project Gallery</h2>
-                        <div class="mt-6 grid gap-4 sm:grid-cols-2">
+                        <div class="mt-6 grid gap-4 sm:grid-cols-2" data-motion="stagger" data-motion-delay="80">
                             @foreach ($project->images as $image)
                                 <a
                                     href="{{ $image->url() }}"
                                     class="group block w-full overflow-hidden rounded focus:outline-none focus:ring-2 focus:ring-accent-500 focus:ring-offset-2"
                                     @click.prevent="openAt({{ $loop->index }}, $refs.viewer)"
                                     aria-label="Open image {{ $loop->iteration }}: {{ $image->alt_text ?: $project->title }}"
+                                    data-motion-item="true"
                                 >
                                     <img src="{{ $image->thumbUrl() ?: $image->url() }}" alt="{{ $image->alt_text ?: $project->title }}" class="h-64 w-full rounded object-cover transition duration-300 group-hover:scale-[1.02]" width="800" height="600" loading="lazy" decoding="async">
                                 </a>
@@ -136,7 +137,7 @@
             </div>
 
             <aside class="space-y-6">
-                <div class="rounded border border-steel-200 bg-steel-100 p-6">
+                <div class="rounded border border-steel-200 bg-steel-100 p-6" data-motion="reveal">
                     <p class="font-display text-2xl font-semibold uppercase text-navy-950">Project Information</p>
                     <dl class="mt-5 space-y-4 text-sm">
                         <div><dt class="font-semibold text-navy-900">Category</dt><dd class="text-steel-500">{{ $project->category }}</dd></div>
@@ -146,20 +147,20 @@
                         <div><dt class="font-semibold text-navy-900">Status</dt><dd class="text-steel-500">{{ str($project->status)->replace('_', ' ')->title() }}</dd></div>
                     </dl>
                 </div>
-                <div class="rounded bg-navy-950 p-6 text-white">
+                <div class="rounded bg-navy-950 p-6 text-white" data-motion="reveal" data-motion-delay="80">
                     <p class="font-display text-2xl font-semibold uppercase">Start a Similar Project</p>
                     <p class="mt-3 text-sm leading-7 text-white/70">Our team is ready to help you plan and deliver your next construction project.</p>
-                    <div class="mt-5"><x-ui.button href="{{ route('contact') }}">Contact Us</x-ui.button></div>
+                    <div class="mt-5"><x-ui.button href="{{ route('contact') }}" wire:navigate>Contact Us</x-ui.button></div>
                 </div>
             </aside>
         </div>
 
         @if ($relatedProjects->isNotEmpty())
             <div class="container-site mt-20">
-                <x-ui.section-heading eyebrow="Related Projects" title="More Projects in This Category" />
-                <div class="mt-10 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+                <x-ui.section-heading eyebrow="Related Projects" title="More Projects in This Category" data-motion="reveal" />
+                <div class="mt-10 grid gap-6 md:grid-cols-2 xl:grid-cols-3" data-motion="stagger" data-motion-delay="80">
                     @foreach ($relatedProjects as $related)
-                        <x-cards.project-card :project="$related" />
+                        <x-cards.project-card :project="$related" data-motion-item="true" />
                     @endforeach
                 </div>
             </div>

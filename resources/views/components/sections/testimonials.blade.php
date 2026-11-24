@@ -2,10 +2,12 @@
 
 <section class="section-pad bg-steel-100">
     <div class="container-site">
-        <x-ui.section-heading eyebrow="Testimonials" title="What Our Clients Say" description="Trusted by developers, businesses, and public sector partners across Indonesia." align="center" class="mx-auto" />
+        <x-ui.section-heading eyebrow="Testimonials" title="What Our Clients Say" description="Trusted by developers, businesses, and public sector partners across Indonesia." align="center" class="mx-auto" data-motion="reveal" />
 
         <div
             class="mt-12"
+            data-motion="reveal"
+            data-motion-delay="120"
             data-carousel
             aria-roledescription="carousel"
             aria-label="Client testimonials"
@@ -14,6 +16,8 @@
                 total: {{ $testimonials->count() }},
                 perView: window.innerWidth >= 1280 ? 3 : window.innerWidth >= 768 ? 2 : 1,
                 reduceMotion: window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+                media: null,
+                syncReduceMotion: null,
                 timer: null,
                 paused: false,
                 get maxIndex() { return Math.max(0, this.total - this.perView); },
@@ -62,8 +66,25 @@
 
                     this.timer = window.setInterval(() => this.next(), 6000);
                 },
+                init() {
+                    this.media = window.matchMedia('(prefers-reduced-motion: reduce)');
+                    this.syncReduceMotion = () => {
+                        this.reduceMotion = this.media.matches;
+
+                        if (this.reduceMotion) {
+                            this.stopAutoplay();
+                        } else {
+                            this.startAutoplay();
+                        }
+                    };
+
+                    this.media.addEventListener?.('change', this.syncReduceMotion);
+                    this.startAutoplay();
+
+                    return () => this.media?.removeEventListener?.('change', this.syncReduceMotion);
+                },
             }"
-            x-init="$el.dataset.carouselReady = 'true'; startAutoplay()"
+            x-init="$el.dataset.carouselReady = 'true'; init()"
             @resize.window="onResize()"
             @visibilitychange.document="document.hidden ? stopAutoplay() : startAutoplay()"
             @mouseenter="pause()"

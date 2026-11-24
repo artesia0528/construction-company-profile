@@ -6,7 +6,7 @@
             <li class="flex items-center gap-2">
                 @if (! $loop->first)<span>/</span>@endif
                 @if (isset($item['url']))
-                    <a href="{{ $item['url'] }}" class="hover:text-accent-500">{{ $item['label'] }}</a>
+                    <a href="{{ $item['url'] }}" wire:navigate class="hover:text-accent-500">{{ $item['label'] }}</a>
                 @else
                     <span class="text-white">{{ $item['label'] }}</span>
                 @endif

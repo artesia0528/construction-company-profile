@@ -10,7 +10,10 @@
 <div {{ $attributes->merge(['class' => 'rounded border p-6 '.($light ? 'border-white/10 bg-white/5' : 'border-steel-200 bg-white')]) }}>
     <p
         class="font-display text-4xl font-semibold {{ $light ? 'text-accent-500' : 'text-navy-950' }}"
-        x-count="{ value: @js($numericValue), suffix: @js($suffix), duration: 1400 }"
+        data-motion="counter"
+        data-motion-value="{{ $numericValue }}"
+        data-motion-suffix="{{ $suffix }}"
+        data-motion-duration="1400"
     >{{ $statistic->value }}</p>
     <p class="mt-2 text-sm font-medium uppercase tracking-wide {{ $light ? 'text-white/75' : 'text-steel-500' }}">{{ $statistic->label }}</p>
 </div>

@@ -1,0 +1,73 @@
+@theme {
+    --motion-fast: 180ms;
+    --motion-normal: 320ms;
+    --motion-ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes motion-enter {
+    from { opacity: 0; transform: translateY(8px); }
+}
+
+@keyframes motion-exit {
+    to { opacity: 0; transform: translateY(-8px); }
+}
+
+::view-transition-old(match-element),
+::view-transition-old(projects-grid),
+::view-transition-old(project-empty),
+::view-transition-old(form-success),
+::view-transition-old(form-error) {
+    animation: motion-exit var(--motion-fast) ease-in both;
+}
+
+::view-transition-new(match-element),
+::view-transition-new(projects-grid),
+::view-transition-new(project-empty),
+::view-transition-new(form-success),
+::view-transition-new(form-error) {
+    animation: motion-enter var(--motion-normal) var(--motion-ease-out) both;
+}
+
+@keyframes navigate-out {
+    to { opacity: 0; transform: translateY(-6px); }
+}
+
+@keyframes navigate-in {
+    from { opacity: 0; transform: translateY(8px); }
+}
+
+html:active-view-transition-type(navigate)::view-transition-old(livewire-navigate),
+::view-transition-old(livewire-navigate) {
+    animation: navigate-out 150ms ease-in both;
+}
+
+html:active-view-transition-type(navigate)::view-transition-new(livewire-navigate),
+::view-transition-new(livewire-navigate) {
+    animation: navigate-in 220ms var(--motion-ease-out) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    ::before,
+    ::after {
+        scroll-behavior: auto !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+
+    ::view-transition-old(match-element),
+    ::view-transition-new(match-element),
+    ::view-transition-old(livewire-navigate),
+    ::view-transition-new(livewire-navigate),
+    ::view-transition-old(projects-grid),
+    ::view-transition-new(projects-grid),
+    ::view-transition-old(project-empty),
+    ::view-transition-new(project-empty),
+    ::view-transition-old(form-success),
+    ::view-transition-new(form-success),
+    ::view-transition-old(form-error),
+    ::view-transition-new(form-error) {
+        animation: none !important;
+    }
+}

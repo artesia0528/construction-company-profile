@@ -6,7 +6,7 @@
     </div>
     <h3 class="mt-6 font-display text-2xl font-semibold uppercase text-navy-950">{{ $service->name }}</h3>
     <p class="mt-3 flex-1 text-sm leading-7 text-steel-500">{{ $service->short_description }}</p>
-    <a href="{{ route('services.show', $service) }}" class="mt-6 inline-flex items-center text-sm font-semibold uppercase tracking-wide text-accent-600 hover:text-accent-500">
+    <a href="{{ route('services.show', $service) }}" wire:navigate class="mt-6 inline-flex items-center text-sm font-semibold uppercase tracking-wide text-accent-600 hover:text-accent-500">
         Learn More <span class="ml-2">→</span>
     </a>
 </article>
