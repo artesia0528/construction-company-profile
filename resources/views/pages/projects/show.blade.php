@@ -115,19 +115,19 @@
                                 <div class="lightbox-topbar">
                                     <p class="lightbox-counter" x-text="`${index + 1} / ${images.length}`"></p>
                                     <button type="button" class="lightbox-close" @click="close($refs.viewer)" aria-label="Close image viewer">
-                                        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                                        <x-heroicon-o-x-mark class="h-6 w-6" aria-hidden="true" />
                                     </button>
                                 </div>
                                 <div class="lightbox-body">
                                     <button type="button" class="lightbox-nav lightbox-prev" @click="prev()" :disabled="!many" :class="{ 'lightbox-nav-hidden': !many }" aria-label="Previous image">
-                                        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+                                        <x-heroicon-o-chevron-left class="h-6 w-6" aria-hidden="true" />
                                     </button>
                                     <figure class="lightbox-figure">
                                         <img class="lightbox-image" :src="open ? current?.src : null" :alt="current?.alt || ''" width="1600" height="1200">
                                         <figcaption class="lightbox-caption" x-show="current?.caption" x-text="current?.caption"></figcaption>
                                     </figure>
                                     <button type="button" class="lightbox-nav lightbox-next" @click="next()" :disabled="!many" :class="{ 'lightbox-nav-hidden': !many }" aria-label="Next image">
-                                        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                                        <x-heroicon-o-chevron-right class="h-6 w-6" aria-hidden="true" />
                                     </button>
                                 </div>
                             </div>
@@ -150,7 +150,7 @@
                 <div class="rounded bg-navy-950 p-6 text-white" data-motion="reveal" data-motion-delay="80">
                     <p class="font-display text-2xl font-semibold uppercase">Start a Similar Project</p>
                     <p class="mt-3 text-sm leading-7 text-white/70">Our team is ready to help you plan and deliver your next construction project.</p>
-                    <div class="mt-5"><x-ui.button href="{{ route('contact') }}" wire:navigate>Contact Us</x-ui.button></div>
+                    <div class="mt-5"><x-ui.button href="{{ route('contact') }}" wire:navigate>Discuss a Similar Project</x-ui.button></div>
                 </div>
             </aside>
         </div>

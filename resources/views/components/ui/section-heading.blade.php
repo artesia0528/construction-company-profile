@@ -8,7 +8,7 @@
 
 <div {{ $attributes->merge(['class' => 'max-w-3xl '.$alignClass]) }}>
     @if ($eyebrow)
-        <p class="font-display text-sm font-semibold uppercase tracking-[0.25em] text-accent-500">{{ $eyebrow }}</p>
+        <p class="font-display text-sm font-semibold uppercase tracking-[0.25em] {{ $light ? 'text-accent-500' : 'text-accent-600' }}">{{ $eyebrow }}</p>
     @endif
     <h2 class="mt-3 font-display text-4xl font-semibold uppercase leading-tight md:text-5xl {{ $titleColor }}">{{ $title }}</h2>
     @if ($description)

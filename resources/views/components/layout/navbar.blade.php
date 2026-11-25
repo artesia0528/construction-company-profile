@@ -53,7 +53,7 @@
         </nav>
 
         <div class="hidden md:block" data-motion-item="true">
-            <x-ui.button href="{{ route('contact') }}" wire:navigate variant="primary">Get a Quote</x-ui.button>
+            <x-ui.button href="{{ route('contact') }}" wire:navigate variant="primary">Request a Quote</x-ui.button>
         </div>
 
         <button
@@ -68,7 +68,7 @@
             :aria-expanded="open ? 'true' : 'false'"
             data-motion-item="true"
         >
-            <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+            <x-heroicon-o-bars-3 class="h-6 w-6" aria-hidden="true" />
         </button>
     </div>
 
@@ -88,7 +88,7 @@
             @foreach ($links as $link)
                 <a href="{{ route($link['route']) }}" wire:navigate class="border-l-2 border-transparent py-3 pl-3 text-sm font-semibold uppercase tracking-wide transition-colors hover:border-accent-500/60 hover:text-accent-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500 focus-visible:ring-offset-2 focus-visible:ring-offset-navy-900 {{ request()->routeIs($link['route'].'*') ? 'border-accent-500 text-accent-500' : 'text-white/90' }}" @if (request()->routeIs($link['route'].'*')) aria-current="page" @endif>{{ $link['label'] }}</a>
             @endforeach
-            <div class="pt-3"><x-ui.button href="{{ route('contact') }}" wire:navigate variant="primary" class="w-full">Get a Quote</x-ui.button></div>
+            <div class="pt-3"><x-ui.button href="{{ route('contact') }}" wire:navigate variant="primary" class="w-full">Request a Quote</x-ui.button></div>
         </nav>
     </div>
 </header>

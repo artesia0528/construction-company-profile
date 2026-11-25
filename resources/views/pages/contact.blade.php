@@ -14,7 +14,7 @@
                     </dl>
                 </div>
                 <div class="overflow-hidden rounded border border-steel-200" data-motion="reveal" data-motion-delay="80">
-                    <iframe src="{{ $companySetting->google_maps_embed_url }}" class="h-72 w-full" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Company location map"></iframe>
+                    <iframe src="{{ $companySetting->google_maps_embed_url }}" class="h-72 w-full" width="1200" height="288" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Company location map"></iframe>
                 </div>
             </div>
 

@@ -2,7 +2,7 @@
 
 <section class="section-pad bg-steel-100">
     <div class="container-site">
-        <x-ui.section-heading eyebrow="Testimonials" title="What Our Clients Say" description="Trusted by developers, businesses, and public sector partners across Indonesia." align="center" class="mx-auto" data-motion="reveal" />
+        <x-ui.section-heading eyebrow="Testimonials" title="What Our Clients Say" description="Selected feedback from clients on project communication, quality, and delivery." align="center" class="mx-auto" data-motion="reveal" />
 
         <div
             class="mt-12"
@@ -95,10 +95,10 @@
             <div class="mb-6 flex items-center justify-end gap-3">
                 <p class="sr-only" aria-live="polite" x-text="`Showing testimonials ${Math.min(index + 1, total)} to ${Math.min(index + perView, total)} of ${total}`"></p>
                 <button type="button" class="inline-flex h-11 w-11 items-center justify-center rounded border border-steel-200 bg-white text-navy-950 transition hover:border-accent-500 hover:text-accent-600 focus:outline-none focus:ring-2 focus:ring-accent-500 disabled:cursor-not-allowed disabled:opacity-40" data-carousel-prev @click="prev()" :disabled="index === 0" aria-label="Previous testimonials">
-                    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+                    <x-heroicon-o-chevron-left class="h-5 w-5" aria-hidden="true" />
                 </button>
                 <button type="button" class="inline-flex h-11 w-11 items-center justify-center rounded border border-steel-200 bg-white text-navy-950 transition hover:border-accent-500 hover:text-accent-600 focus:outline-none focus:ring-2 focus:ring-accent-500 disabled:cursor-not-allowed disabled:opacity-40" data-carousel-next @click="next()" :disabled="index >= maxIndex" aria-label="Next testimonials">
-                    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                    <x-heroicon-o-chevron-right class="h-5 w-5" aria-hidden="true" />
                 </button>
             </div>
 

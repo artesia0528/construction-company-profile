@@ -15,16 +15,18 @@
     --color-navy-700: #24324f;
     --color-steel-100: #f3f5f7;
     --color-steel-200: #e5e9ee;
-    --color-steel-500: #6b7280;
+    --color-steel-500: #6a707e;
     --color-steel-700: #374151;
     --color-accent-500: #f59e0b;
-    --color-accent-600: #d97706;
+    --color-accent-600: #b36204;
 }
 
 @layer base {
     html { scroll-behavior: smooth; }
     body { @apply bg-white text-slate-800 antialiased; font-family: var(--font-sans); }
     h1, h2, h3, h4, .font-display { font-family: var(--font-display); letter-spacing: 0.01em; }
+    :where(a[href], button, summary, select, label[for], input[type="checkbox"], input[type="radio"], [role="button"], [role="tab"], [role="switch"]):not([disabled]):not([aria-disabled="true"]) { cursor: pointer; }
+    :where(button, input, select, textarea, [role="button"])[disabled], :where([aria-disabled="true"]) { cursor: not-allowed; }
     :where(a, button, input, textarea, select, summary, [tabindex]:not([tabindex="-1"])):focus-visible { outline: 2px solid var(--color-accent-500); outline-offset: 2px; }
     [x-cloak] { display: none !important; }
 }

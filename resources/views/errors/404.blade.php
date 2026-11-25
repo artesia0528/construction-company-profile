@@ -24,7 +24,7 @@
                 <p class="mt-6 text-base leading-7 text-steel-600">The page you are looking for may have been moved, deleted, or never existed.</p>
                 <div class="mt-8 flex flex-wrap justify-center gap-4">
                     <x-ui.button href="{{ route('home') }}">Back to Home</x-ui.button>
-                    <x-ui.button href="{{ route('contact') }}" variant="outline">Contact Us</x-ui.button>
+                    <x-ui.button href="{{ route('contact') }}" variant="outline">Contact the Team</x-ui.button>
                 </div>
             </div>
         </div>

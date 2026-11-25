@@ -25,7 +25,7 @@
                 <div class="rounded bg-navy-950 p-6 text-white" data-motion="reveal" data-motion-delay="80">
                     <p class="font-display text-2xl font-semibold uppercase">Need This Service?</p>
                     <p class="mt-3 text-sm leading-7 text-white/70">Discuss your project requirements with our construction specialists.</p>
-                    <div class="mt-5"><x-ui.button href="{{ route('contact') }}" wire:navigate>Contact Us</x-ui.button></div>
+                    <div class="mt-5"><x-ui.button href="{{ route('contact') }}" wire:navigate>Discuss This Service</x-ui.button></div>
                 </div>
             </aside>
         </div>

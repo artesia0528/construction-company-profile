@@ -25,7 +25,7 @@
                 <ul class="mt-4 space-y-3 text-steel-700">
                     @foreach (preg_split('/\r\n|\r|\n/', (string) $companySetting->mission) as $mission)
                         @if (trim($mission) !== '')
-                            <li class="flex gap-3"><span class="mt-1 text-accent-500">■</span><span>{{ $mission }}</span></li>
+                            <li class="flex gap-3"><span class="mt-1 text-accent-600">■</span><span>{{ $mission }}</span></li>
                         @endif
                     @endforeach
                 </ul>

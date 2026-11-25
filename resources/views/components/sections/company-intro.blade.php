@@ -9,8 +9,8 @@
             <x-ui.section-heading eyebrow="About Company" :title="$settings->company_name" :description="$settings->company_intro" data-motion-item="true" />
             <p class="mt-6 leading-7 text-steel-500" data-motion-item="true">{{ $settings->company_description }}</p>
             <div class="mt-8 flex flex-wrap gap-4" data-motion-item="true">
-                <x-ui.button href="{{ route('about') }}">Learn More</x-ui.button>
-                <x-ui.button href="{{ route('contact') }}" variant="outline">Contact Us</x-ui.button>
+                <x-ui.button href="{{ route('about') }}">About Our Company</x-ui.button>
+                <x-ui.button href="{{ route('contact') }}" variant="outline">Start a Consultation</x-ui.button>
             </div>
         </div>
     </div>

@@ -1,9 +1,9 @@
 @props(['testimonial'])
 
 <article {{ $attributes->merge(['class' => 'h-full rounded border border-steel-200 bg-white p-8 shadow-sm transition duration-200 hover:-translate-y-1 hover:border-accent-500/60 hover:shadow-md']) }}>
-    <div class="text-accent-500">
+    <div class="text-accent-600" aria-label="Rated {{ $testimonial->rating }} out of 5">
         @for ($i = 0; $i < 5; $i++)
-            <span class="{{ $i < $testimonial->rating ? 'text-accent-500' : 'text-steel-200' }}">★</span>
+            <span class="{{ $i < $testimonial->rating ? 'text-accent-600' : 'text-steel-200' }}" aria-hidden="true">★</span>
         @endfor
     </div>
     <p class="mt-5 text-sm leading-7 text-steel-700">“{{ $testimonial->testimonial_content }}”</p>
